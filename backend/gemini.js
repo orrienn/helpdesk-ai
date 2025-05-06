@@ -1,6 +1,9 @@
 import axios from 'axios';
+import dotenv from 'dotenv';
 
-const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent';
+dotenv.config();
+
+const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent';
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 export async function chatWithGemini(message, formState = {}) {
@@ -36,6 +39,8 @@ export async function chatWithGemini(message, formState = {}) {
         }
     });
 
-    const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No answer';
+    // console.log('Gemini raw response:', JSON.stringify(response.data, null, 2));
+
+    const text = response.data?.candidates?.[0]?.content?.parts?.[0]?.text || 'No answer.';
     return text;
 }

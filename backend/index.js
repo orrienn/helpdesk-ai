@@ -16,11 +16,14 @@ app.post('/api/chat', async (req, res) => {
         return res.status(400).json({ error: 'Message is required' });
     }
 
+    // const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
+    // console.log("Api key: ", GEMINI_API_KEY);
+
     try {
         const response = await chatWithGemini(message, formState);
         res.json({ response });
     } catch (error) {
-        console.error('Error communicating with Gemini:', error);
+        console.error('Error communicating with Gemini:', error?.response?.data || error.message || error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
