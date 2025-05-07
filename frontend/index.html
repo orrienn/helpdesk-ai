@@ -3,17 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Chatbot</title>
+  <title>Helpdesk Assistant</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="chat-container">
-    <div id="chat-box" class="chat-box"></div>
-    <form id="chat-form">
-      <input type="text" id="user-input" placeholder="Type your message..." required />
-      <button type="submit">Send</button>
-    </form>
+  <div class="container">
+    <div class="form-panel">
+      <h2>Helpdesk Form</h2>
+      <ul id="form-data"></ul>
+    </div>
+
+    <div class="chat-panel">
+      <div id="chat-box" class="chat-box"></div>
+      <form id="chat-form">
+        <input type="text" id="user-input" placeholder="Type your message..." required />
+        <button type="submit">Send</button>
+      </form>
+    </div>
   </div>
+
   <script src="app.js"></script>
 </body>
 </html>
