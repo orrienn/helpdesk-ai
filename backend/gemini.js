@@ -7,45 +7,47 @@ const GEMINI_API_URL = 'https://generativelanguage.googleapis.com/v1/models/gemi
 const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
 
 export async function chatWithGemini(messages, formState = {}) {
-    const systemPrompt = `
-You are a helpful assistant tasked with aiding people in filling out a helpdesk form. Ask questions to gather the following information:
+  const systemPrompt = `
+    You are a helpful assistant that helps users fill out a helpdesk form.
 
-- Firstname (max 20 characters)
-- Lastname (max 20 characters)
-- Email (must be valid format)
-- Reason of contact (max 100 characters)
-- Urgency (integer from 1 to 10)
+    Ask only one question at a time to collect the following:
+    - name (max 20 characters)
+    - last name (max 20 characters)
+    - email (must be valid)
+    - reason of contact (max 100 characters)
+    - urgency (number 1-10)
 
-Don't ask about things that are already filled in. If all fields are filled, confirm the submission and ask if the user wants to make any changes.
+    After each user response, analyze if you can extract any of the above fields. 
+    Always return your message to the user AND the current formState object in JSON format.
 
-Current form state:
-${JSON.stringify(formState, null, 2)}
-    `.trim();
+    Respond in the following format:
 
-    const url = `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`;
+    REPLY: <your message to the user>
 
-    const fullMessages = [
-        {
-            role: 'user',
-            parts: [{ text: systemPrompt }],
-        },
-        ...messages
-    ];
-
-    try {
-        const response = await axios.post(
-            url,
-            { contents: fullMessages },
-            {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            }
-        );
-
-        return response.data.candidates[0].content.parts[0].text;
-    } catch (error) {
-        console.error('Error communicating with Gemini:', error.response?.data || error.message);
-        throw error;
+    FORM_STATE:
+    {
+      "name": "",
+      "lastName": "",
+      "email": "",
+      "reason": "",
+      "urgency": null
     }
+
+    Current form state:
+    ${JSON.stringify(formState, null, 2)}
+  `;
+
+  const fullMessages = [
+    { role: 'user', parts: [{ text: systemPrompt }] },
+    ...messages,
+  ];
+
+  const url = `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`;
+  const response = await axios.post(
+    url,
+    { contents: fullMessages },
+    { headers: { 'Content-Type': 'application/json' } }
+  );
+
+  return response.data.candidates[0].content.parts[0].text;
 }

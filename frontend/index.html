@@ -8,12 +8,16 @@
 </head>
 <body>
   <div class="container">
-    <div class="form-panel">
+    <div class="form-container">
       <h2>Helpdesk Form</h2>
-      <ul id="form-data"></ul>
+      <div class="form-field"><strong>Name:</strong> <span id="name-field">—</span></div>
+      <div class="form-field"><strong>Last Name:</strong> <span id="lastName-field">—</span></div>
+      <div class="form-field"><strong>Email:</strong> <span id="email-field">—</span></div>
+      <div class="form-field"><strong>Reason:</strong> <span id="reason-field">—</span></div>
+      <div class="form-field"><strong>Urgency:</strong> <span id="urgency-field">—</span></div>
     </div>
 
-    <div class="chat-panel">
+    <div class="chat-container">
       <div id="chat-box" class="chat-box"></div>
       <form id="chat-form">
         <input type="text" id="user-input" placeholder="Type your message..." required />

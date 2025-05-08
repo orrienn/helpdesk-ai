@@ -20,7 +20,18 @@ app.post('/api/chat', async (req, res) => {
 
     try {
         const response = await chatWithGemini(messages, formState);
-        res.json({ response, formState });
+        let updatedFormState = formState;
+        try {
+            const match = response.match(/```json\n([\s\S]*?)\n```/);
+            if (match) {
+                updatedFormState = JSON.parse(match[1]);
+            }
+        } catch (e) {
+        console.warn('Failed to parse form state from response.');
+        }
+
+        res.json({ response, formState: updatedFormState });
+
     } catch (error) {
         console.error('Error communicating with model:', error?.response?.data || error.message || error);
         res.status(500).json({ error: 'Internal Server Error' });
